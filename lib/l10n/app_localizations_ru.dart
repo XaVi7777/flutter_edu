@@ -51,7 +51,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get module1 => 'Модуль 1: Основы программирования и Dart';
 
   @override
-  String get lesson1 => 'Введение в программирование';
+  String get lesson1 => 'Настройка рабочего места';
 
   @override
   String get lesson2 => 'Git - система контроля версий';
@@ -60,7 +60,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get lesson3 => 'Основы языка Dart';
 
   @override
-  String get lesson4 => 'Управляющие конструкции';
+  String get lesson4 => 'Управляющие конструкции и функции';
 
   @override
   String get lesson5 => 'ООП и асинхронность';

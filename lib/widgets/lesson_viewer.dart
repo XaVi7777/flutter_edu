@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../l10n/app_localizations.dart';
 
 import '../providers/course_provider.dart';
@@ -168,11 +170,11 @@ class _PageContent extends StatelessWidget {
     // Check if this is a cheatsheet page (contains "Шпаргалка" or "шпаргалка")
     final isCheatsheet = page.getTitle(languageCode).toLowerCase().contains('шпаргалка');
 
-    // Check if this is an interactive page with code
-    final isInteractive = page.type == LessonPageType.interactive && page.codeSnippet != null;
+    // Check if this page has code (interactive or code type)
+    final hasCodeSideBySide = (page.type == LessonPageType.interactive || page.type == LessonPageType.code) && page.codeSnippet != null;
 
-    // For interactive pages, use side-by-side layout
-    if (isInteractive) {
+    // For pages with code, use side-by-side layout
+    if (hasCodeSideBySide) {
       return SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 48.w, vertical: 32.h),
         child: Column(
@@ -232,25 +234,52 @@ class _PageContent extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: Text(
-                      page.getContent(languageCode),
-                      style: TextStyle(
-                        fontSize: 20.sp,
-                        height: 1.8,
-                        color: Colors.grey.shade800,
-                        letterSpacing: 0.3,
+                    child: MarkdownBody(
+                      data: page.getContent(languageCode),
+                      styleSheet: MarkdownStyleSheet(
+                        p: TextStyle(
+                          fontSize: 20.sp,
+                          height: 1.8,
+                          color: Colors.grey.shade800,
+                          letterSpacing: 0.3,
+                        ),
+                        a: TextStyle(
+                          fontSize: 20.sp,
+                          color: Theme.of(context).colorScheme.primary,
+                          decoration: TextDecoration.underline,
+                        ),
+                        strong: TextStyle(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade900,
+                        ),
+                        em: TextStyle(
+                          fontSize: 20.sp,
+                          fontStyle: FontStyle.italic,
+                        ),
+                        listBullet: TextStyle(
+                          fontSize: 20.sp,
+                          color: Colors.grey.shade800,
+                        ),
                       ),
+                      onTapLink: (text, href, title) {
+                        if (href != null) {
+                          launchUrl(Uri.parse(href), mode: LaunchMode.externalApplication);
+                        }
+                      },
                     ),
                   ),
                 ),
                 SizedBox(width: 32.w),
 
-                // Right side: Code example
+                // Right side: Code example or DartPad
                 Expanded(
                   flex: 1,
-                  child: DartPadEmbed(
-                    initialCode: page.codeSnippet!,
-                  ),
+                  child: page.type == LessonPageType.interactive
+                      ? DartPadEmbed(
+                          initialCode: page.codeSnippet!,
+                        )
+                      : _CodeBlock(code: page.codeSnippet!),
                 ),
               ],
             ),
@@ -304,7 +333,7 @@ class _PageContent extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(24.w),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isCheatsheet ? Colors.black : Colors.white,
                 borderRadius: BorderRadius.circular(16.r),
                 boxShadow: [
                   BoxShadow(
@@ -314,20 +343,88 @@ class _PageContent extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Text(
-                page.getContent(languageCode),
-                style: TextStyle(
-                  fontSize: 20.sp,
-                  height: 1.8,
-                  color: Colors.grey.shade800,
-                  letterSpacing: 0.3,
+              child: MarkdownBody(
+                data: page.getContent(languageCode),
+                styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(
+                    fontSize: 20.sp,
+                    height: 1.8,
+                    color: isCheatsheet ? Colors.white : Colors.grey.shade800,
+                    letterSpacing: 0.3,
+                  ),
+                  a: TextStyle(
+                    fontSize: 20.sp,
+                    color: isCheatsheet ? Colors.lightBlue : Theme.of(context).colorScheme.primary,
+                    decoration: TextDecoration.underline,
+                  ),
+                  strong: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                    color: isCheatsheet ? Colors.white : Colors.grey.shade900,
+                  ),
+                  em: TextStyle(
+                    fontSize: 20.sp,
+                    fontStyle: FontStyle.italic,
+                    color: isCheatsheet ? Colors.white70 : null,
+                  ),
+                  h1: TextStyle(
+                    fontSize: 32.sp,
+                    fontWeight: FontWeight.bold,
+                    color: isCheatsheet ? Colors.white : Theme.of(context).colorScheme.primary,
+                    height: 1.3,
+                  ),
+                  h2: TextStyle(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
+                    color: isCheatsheet ? Colors.white : Theme.of(context).colorScheme.primary,
+                    height: 1.3,
+                  ),
+                  h3: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.bold,
+                    color: isCheatsheet ? Colors.white : Colors.grey.shade900,
+                    height: 1.3,
+                  ),
+                  listBullet: TextStyle(
+                    fontSize: 20.sp,
+                    color: isCheatsheet ? Colors.white : Theme.of(context).colorScheme.primary,
+                  ),
+                  code: TextStyle(
+                    fontSize: 18.sp,
+                    fontFamily: 'monospace',
+                    backgroundColor: isCheatsheet ? Colors.grey.shade800 : Colors.grey.shade100,
+                    color: isCheatsheet ? Colors.lightGreenAccent : Theme.of(context).colorScheme.secondary,
+                  ),
+                  codeblockDecoration: BoxDecoration(
+                    color: isCheatsheet ? Colors.grey.shade900 : const Color(0xFF1E1E1E),
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  tableHead: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: isCheatsheet ? Colors.white : Colors.grey.shade900,
+                  ),
+                  tableBody: TextStyle(
+                    fontSize: 16.sp,
+                    color: isCheatsheet ? Colors.white : Colors.grey.shade800,
+                  ),
+                  tableBorder: TableBorder.all(
+                    color: isCheatsheet ? Colors.grey.shade700 : Colors.grey.shade300,
+                    width: 1,
+                  ),
+                  tableCellsPadding: EdgeInsets.all(8.w),
                 ),
+                onTapLink: (text, href, title) {
+                  if (href != null) {
+                    launchUrl(Uri.parse(href), mode: LaunchMode.externalApplication);
+                  }
+                },
               ),
             ),
             SizedBox(height: 32.h),
 
-            // Code snippet for non-interactive pages
-            if (page.codeSnippet != null)
+            // Code snippet for text pages only (code and interactive have side-by-side layout)
+            if (page.codeSnippet != null && page.type == LessonPageType.text)
               _CodeBlock(code: page.codeSnippet!),
           ],
         ),

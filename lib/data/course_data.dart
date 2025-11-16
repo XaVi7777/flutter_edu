@@ -22,10 +22,10 @@ class CourseData {
 
   static Future<List<Lesson>> _getModule1Lessons(String languageCode) async {
     return [
-      _createPlaceholder(1, 'lesson1', 1),
+      await LessonContentService.loadLesson(1, languageCode), // Setup
       await LessonContentService.loadLesson(2, languageCode), // Git
       await LessonContentService.loadLesson(3, languageCode), // Dart
-      _createPlaceholder(4, 'lesson4', 1),
+      await LessonContentService.loadLesson(4, languageCode), // Control structures and functions
       _createPlaceholder(5, 'lesson5', 1),
       _createPlaceholder(6, 'lesson6', 1),
     ];

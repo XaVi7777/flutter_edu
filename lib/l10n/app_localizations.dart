@@ -185,7 +185,7 @@ abstract class AppLocalizations {
   /// No description provided for @lesson1.
   ///
   /// In ru, this message translates to:
-  /// **'Введение в программирование'**
+  /// **'Настройка рабочего места'**
   String get lesson1;
 
   /// No description provided for @lesson2.
@@ -203,7 +203,7 @@ abstract class AppLocalizations {
   /// No description provided for @lesson4.
   ///
   /// In ru, this message translates to:
-  /// **'Управляющие конструкции'**
+  /// **'Управляющие конструкции и функции'**
   String get lesson4;
 
   /// No description provided for @lesson5.
