@@ -26,7 +26,7 @@ class CourseData {
       await LessonContentService.loadLesson(2, languageCode), // Git
       await LessonContentService.loadLesson(3, languageCode), // Dart
       await LessonContentService.loadLesson(4, languageCode), // Control structures and functions
-      _createPlaceholder(5, 'lesson5', 1),
+      await LessonContentService.loadLesson(5, languageCode), // OOP and async
       _createPlaceholder(6, 'lesson6', 1),
     ];
   }
