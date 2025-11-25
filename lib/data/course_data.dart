@@ -15,7 +15,7 @@ class CourseData {
         id: 2,
         titleKey: 'module2',
         descriptionKey: '',
-        lessons: _getModule2Lessons(),
+        lessons: await _getModule2Lessons(languageCode),
       ),
     ];
   }
@@ -31,9 +31,9 @@ class CourseData {
     ];
   }
 
-  static List<Lesson> _getModule2Lessons() {
+  static Future<List<Lesson>> _getModule2Lessons(String languageCode) async {
     return [
-      _createPlaceholder(7, 'lesson7', 2),
+      await LessonContentService.loadLesson(7, languageCode), // Basic Widgets
       _createPlaceholder(8, 'lesson8', 2),
       _createPlaceholder(9, 'lesson9', 2),
       _createPlaceholder(10, 'lesson10', 2),
