@@ -75,7 +75,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get lesson7 => 'Flutter-ге кіріспе';
 
   @override
-  String get lesson8 => 'Негізгі виджеттер';
+  String get lesson8 => 'Тәуелділіктер және роутинг';
 
   @override
   String get lesson9 => 'Тізімдер және айналдыру';

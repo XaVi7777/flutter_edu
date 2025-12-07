@@ -58,7 +58,7 @@ class _LessonViewerState extends State<LessonViewer> {
         // Page indicator
         Container(
           padding: EdgeInsets.all(16.w),
-          color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+          color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
           child: Row(
             children: [
               Expanded(

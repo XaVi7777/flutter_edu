@@ -34,7 +34,7 @@ class CourseData {
   static Future<List<Lesson>> _getModule2Lessons(String languageCode) async {
     return [
       await LessonContentService.loadLesson(7, languageCode), // Basic Widgets
-      _createPlaceholder(8, 'lesson8', 2),
+      await LessonContentService.loadLesson(8, languageCode), // Dependencies and Routing
       _createPlaceholder(9, 'lesson9', 2),
       _createPlaceholder(10, 'lesson10', 2),
       _createPlaceholder(11, 'lesson11', 2),

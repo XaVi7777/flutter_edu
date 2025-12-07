@@ -75,7 +75,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get lesson7 => 'Введение в Flutter';
 
   @override
-  String get lesson8 => 'Базовые виджеты';
+  String get lesson8 => 'Зависимости и роутинг';
 
   @override
   String get lesson9 => 'Списки и прокрутка';

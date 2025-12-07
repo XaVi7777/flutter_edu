@@ -16,7 +16,7 @@ class SidebarMenu extends StatelessWidget {
     final courseProvider = context.watch<CourseProvider>();
 
     return Container(
-      color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+      color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
       child: ListView(
         padding: EdgeInsets.symmetric(vertical: 16.h),
         children: [
@@ -65,8 +65,8 @@ class _ModuleTile extends StatelessWidget {
       onExpansionChanged: (expanded) {
         courseProvider.toggleModule(module.id);
       },
-      children: module.lessons.map((lesson) {
-        return _LessonTile(lesson: lesson);
+      children: module.lessons.asMap().entries.map((entry) {
+        return _LessonTile(lesson: entry.value, index: entry.key + 1);
       }).toList(),
     );
   }
@@ -74,8 +74,9 @@ class _ModuleTile extends StatelessWidget {
 
 class _LessonTile extends StatelessWidget {
   final Lesson lesson;
+  final int index;
 
-  const _LessonTile({required this.lesson});
+  const _LessonTile({required this.lesson, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +103,7 @@ class _LessonTile extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.only(left: 48.w, right: 16.w),
       title: Text(
-        titleMap[lesson.titleKey] ?? lesson.titleKey,
+        '$index. ${titleMap[lesson.titleKey] ?? lesson.titleKey}',
         style: TextStyle(
           fontSize: 14.sp,
           color: lesson.isAvailable ? null : Colors.grey,
