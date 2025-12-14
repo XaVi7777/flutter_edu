@@ -35,8 +35,8 @@ class CourseData {
     return [
       await LessonContentService.loadLesson(7, languageCode), // Basic Widgets
       await LessonContentService.loadLesson(8, languageCode), // Dependencies and Routing
-      _createPlaceholder(9, 'lesson9', 2),
-      _createPlaceholder(10, 'lesson10', 2),
+      await LessonContentService.loadLesson(9, languageCode), // Lists and Scrolling
+      await LessonContentService.loadLesson(10, languageCode), // Forms and Data Input
       _createPlaceholder(11, 'lesson11', 2),
       _createPlaceholder(12, 'lesson12', 2),
     ];
