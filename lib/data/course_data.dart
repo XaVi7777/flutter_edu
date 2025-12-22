@@ -37,7 +37,7 @@ class CourseData {
       await LessonContentService.loadLesson(8, languageCode), // Dependencies and Routing
       await LessonContentService.loadLesson(9, languageCode), // Lists and Scrolling
       await LessonContentService.loadLesson(10, languageCode), // Forms and Data Input
-      _createPlaceholder(11, 'lesson11', 2),
+      await LessonContentService.loadLesson(11, languageCode), // StatefulWidget and State
       _createPlaceholder(12, 'lesson12', 2),
     ];
   }
